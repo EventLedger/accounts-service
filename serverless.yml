@@ -1,0 +1,51 @@
+org: hhassan
+app: orbital-serverless
+service: accounts-service
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    MONGODB_URI: ${ssm:/my-service/MONGODB_URI~true}
+    EVENT_BUS_NAME: ${ssm:/my-service/EVENT_BUS_NAME~true}
+
+functions:
+  createAccount:
+    handler: src/handlers/createAccount.handler
+    events:
+      - http:
+          path: accounts
+          method: post
+
+  getAccount:
+    handler: src/handlers/getAccount.handler
+    events:
+      - http:
+          path: accounts/{accountId}
+          method: get
+
+  updateAccount:
+    handler: src/handlers/updateAccount.handler
+    events:
+      - http:
+          path: accounts/{accountId}
+          method: put
+
+  createTransaction:
+    handler: src/handlers/createTransaction.handler
+    events:
+      - http:
+          path: accounts/{accountId}/transactions
+          method: post
+
+  getTransactions:
+    handler: src/handlers/getTransactions.handler
+    events:
+      - http:
+          path: accounts/{accountId}/transactions
+          method: get
+
+package:
+  exclude:
+    - node_modules/**

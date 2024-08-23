@@ -1,0 +1,16 @@
+{
+  "name": "orbital-serverless-test",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.5.0",
+    "aws-sdk": "^2.1681.0",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.3",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
