@@ -49,3 +49,4 @@ functions:
 package:
   exclude:
     - node_modules/**
+    - src/tests/**
