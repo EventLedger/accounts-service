@@ -1,22 +1,22 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-let cachedDbConnection: typeof mongoose | null = null;
+let cachedDbConnection: typeof mongoose | null = null
 
 export async function connectToDatabase(): Promise<typeof mongoose> {
   if (cachedDbConnection) {
-    return cachedDbConnection;
+    return cachedDbConnection
   }
 
-  const dbUri = process.env.MONGODB_URI;
+  const dbUri = process.env.MONGODB_URI
   if (!dbUri) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env');
+    throw new Error('Please define the MONGODB_URI environment variable inside .env')
   }
 
   try {
-    cachedDbConnection = await mongoose.connect(dbUri);
-    return cachedDbConnection;
+    cachedDbConnection = await mongoose.connect(dbUri)
+    return cachedDbConnection
   } catch (error) {
-    cachedDbConnection = null;
-    throw new Error(`Failed to connect to MongoDB: ${error.message}`);
+    cachedDbConnection = null
+    throw new Error(`Failed to connect to MongoDB: ${error.message}`)
   }
 }

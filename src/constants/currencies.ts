@@ -1,4 +1,4 @@
-const DEFAULT_SUPPORTED_CURRENCY = 'GBP' as const;
+const DEFAULT_SUPPORTED_CURRENCY = 'GBP' as const
 export const SUPPORTED_CURRENCIES = [
   DEFAULT_SUPPORTED_CURRENCY,
   'USD',
@@ -6,6 +6,6 @@ export const SUPPORTED_CURRENCIES = [
   'BTC',
   'CNY',
   'JPY',
-] as const;
+] as const
 
-export type SupportedCurrency = (typeof SUPPORTED_CURRENCIES)[number];
+export type SupportedCurrency = (typeof SUPPORTED_CURRENCIES)[number]

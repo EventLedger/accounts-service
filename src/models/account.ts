@@ -1,12 +1,12 @@
-import { Schema, Document, model, Model } from 'mongoose';
+import { Schema, Document, model, Model } from 'mongoose'
 
-import { SupportedCurrency } from '../constants/currencies';
+import { SupportedCurrency } from '../constants/currencies'
 
 export interface IAccount extends Document {
-  customerId: string;
-  accountNumber: string;
-  currencies: SupportedCurrency[];
-  balances: Map<string, number>;
+  customerId: string
+  accountNumber: string
+  currencies: SupportedCurrency[]
+  balances: Map<string, number>
 }
 
 const AccountSchema = new Schema<IAccount>({
@@ -14,6 +14,6 @@ const AccountSchema = new Schema<IAccount>({
   accountNumber: { type: String, required: true, unique: true },
   currencies: { type: [String], required: true },
   balances: { type: Map, of: Number, default: {} },
-});
+})
 
-export const Account: Model<IAccount> = model<IAccount>('Account', AccountSchema);
+export const Account: Model<IAccount> = model<IAccount>('Account', AccountSchema)

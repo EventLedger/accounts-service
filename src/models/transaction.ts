@@ -1,13 +1,13 @@
-import { Schema, Document, model, Types } from 'mongoose';
+import { Schema, Document, model, Types } from 'mongoose'
 
-import { TransactionType, TransactionTypeMap } from '../constants/transactionType';
+import { TransactionType, TransactionTypeMap } from '../constants/transactionType'
 
 export interface ITransaction extends Document {
-  accountId: Types.ObjectId;
-  type: TransactionType;
-  currency: string;
-  amount: number;
-  date: Date;
+  accountId: Types.ObjectId
+  type: TransactionType
+  currency: string
+  amount: number
+  date: Date
 }
 
 const TransactionSchema = new Schema<ITransaction>({
@@ -16,6 +16,6 @@ const TransactionSchema = new Schema<ITransaction>({
   currency: { type: String, required: true },
   amount: { type: Number, required: true },
   date: { type: Date, default: Date.now },
-});
+})
 
-export const Transaction = model<ITransaction>('Transaction', TransactionSchema);
+export const Transaction = model<ITransaction>('Transaction', TransactionSchema)
