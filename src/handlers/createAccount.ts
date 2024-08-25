@@ -1,24 +1,30 @@
-import { type APIGatewayProxyEvent, type APIGatewayProxyResult } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
-import { type CreateAccountDto } from '../dto/account'
+import { CreateAccountDto } from '../dto/account'
 import { connectToDatabase } from '../utils/connectToDB'
 import { AccountsService } from '../services/accountsService'
+import { validationMiddleware } from '../utils/validationMiddleware'
 
-export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+const createAccountHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
   await connectToDatabase()
   const accountsService = new AccountsService()
-  const createAccountDto: CreateAccountDto = JSON.parse(event.body || '{}')
 
   try {
+    const createAccountDto: CreateAccountDto = JSON.parse(event.body || '{}')
     const account = await accountsService.createAccount(createAccountDto)
+
     return {
       statusCode: 201,
-      body: JSON.stringify(account)
+      body: JSON.stringify(account),
     }
   } catch (error) {
     return {
-      statusCode: error.statusCode || 500,
-      body: JSON.stringify({ message: error.message })
+      statusCode: error.code || 500,
+      body: JSON.stringify({ message: error.message }),
     }
   }
 }
+
+export const handler = validationMiddleware(CreateAccountDto, createAccountHandler)

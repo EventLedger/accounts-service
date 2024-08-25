@@ -13,35 +13,35 @@ provider:
 
 functions:
   createAccount:
-    handler: src/handlers/createAccount.handler
+    handler: build/handlers/createAccount.handler
     events:
       - http:
           path: accounts
           method: post
 
   getAccount:
-    handler: src/handlers/getAccount.handler
+    handler: build/handlers/getAccount.handler
     events:
       - http:
           path: accounts/{accountId}
           method: get
 
   updateAccount:
-    handler: src/handlers/updateAccount.handler
+    handler: build/handlers/updateAccount.handler
     events:
       - http:
           path: accounts/{accountId}
           method: put
 
   createTransaction:
-    handler: src/handlers/createTransaction.handler
+    handler: build/handlers/createTransaction.handler
     events:
       - http:
           path: accounts/{accountId}/transactions
           method: post
 
   getTransactions:
-    handler: src/handlers/getTransactions.handler
+    handler: build/handlers/getTransactions.handler
     events:
       - http:
           path: accounts/{accountId}/transactions
@@ -51,6 +51,7 @@ package:
   exclude:
     - node_modules/**
     - src/tests/**
+    - build/**
 
 plugins:
   - serverless-offline

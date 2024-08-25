@@ -11,7 +11,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   const accountsService = new AccountsService();
   // const eventBridgeService = new AwsEventBridgeService();
-  const transactionsService = new TransactionsService();
+  const transactionsService = new TransactionsService(accountsService);
 
   const accountId = event.pathParameters?.accountId;
 

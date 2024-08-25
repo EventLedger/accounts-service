@@ -12,9 +12,11 @@ export class TransactionsService {
   private accountsService: AccountsService;
   // private eventBridgeService: AwsEventBridgeService;
 
-  constructor() {
+  constructor(
+    accountsService: AccountsService,
+  ) {
     this.transactionModel = Transaction;
-    this.accountsService = this.accountsService;
+    this.accountsService = accountsService;
   }
 
   async createTransaction(

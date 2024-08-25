@@ -10,8 +10,10 @@ import { CreateTransactionDto } from '../dto/transaction';
 export const handler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
-  await connectToDatabase()
-  const transactionsService = new TransactionsService()
+  await connectToDatabase();
+
+  const accountsService = new AccountsService()
+  const transactionsService = new TransactionsService(accountsService);
 
   const createTransactionDto: CreateTransactionDto = JSON.parse(
     event.body || '{}',
