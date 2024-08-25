@@ -1,8 +1,8 @@
 import { type APIGatewayProxyEvent, type APIGatewayProxyResult } from 'aws-lambda'
 
-import { type CreateAccountDto } from '../dto/account.dto'
+import { type CreateAccountDto } from '../dto/account'
 import { connectToDatabase } from '../utils/connectToDB'
-import { AccountsService } from '../services/accounts.service'
+import { AccountsService } from '../services/accountsService'
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   await connectToDatabase()

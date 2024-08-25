@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 
 import { Account, IAccount } from '../models/account';
-import { CreateAccountDto, UpdateAccountDto } from '../dto/account.dto';
+import { CreateAccountDto, UpdateAccountDto } from '../dto/account';
 // import { AwsEventBridgeService } from './awsEventBridgeService';
 import { validateCurrenciesInBalance, initializeBalancesObject, updateBalancesForNewCurrencies } from '../utils/balanceUtils';
 import { NotFoundException } from '../utils/exceptions';

@@ -1,6 +1,6 @@
 import { IAccount } from '../models/account';
 import { BadRequestException } from './exceptions';
-import { CreateAccountDto } from '../dto/account.dto';
+import { CreateAccountDto } from '../dto/account';
 import { SupportedCurrency } from '../constants/currencies';
 
 export function validateCurrenciesInBalance(balances: CreateAccountDto['balances'], supportedCurrencies: SupportedCurrency[]) {
