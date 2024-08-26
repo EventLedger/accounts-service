@@ -69,9 +69,9 @@ export class AccountsService {
       }
 
       const amount = balances[currency]
-      if (!Number.isInteger(amount) || amount <= 0) {
+      if (amount <= 0) {
         throw new BadRequestException(
-          `Invalid amount for currency ${currency}. Amount must be a positive integer.`
+          `Invalid amount for currency ${currency}: ${amount}. Amount must be a positive number.`
         )
       }
     }

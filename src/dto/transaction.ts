@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber, IsEnum, IsIn } from 'class-validator'
+import { IsNotEmpty, IsString, IsNumber, IsEnum, IsIn, IsInt, Min, IsOptional, IsDateString, ValidateIf } from 'class-validator'
 
 import { SUPPORTED_CURRENCIES, SupportedCurrency } from '../constants/currencies'
 
@@ -13,6 +13,7 @@ export class CreateTransactionDto {
 
   @IsNotEmpty()
   @IsNumber()
+  @Min(0)
   amount: number
 
   @IsNotEmpty()
@@ -21,4 +22,28 @@ export class CreateTransactionDto {
     message: `Unsupported currency detected: $value`,
   })
   currency: SupportedCurrency
+}
+
+export class ListTransactionsDto {
+  @IsNotEmpty()
+  @IsString()
+  accountId: string
+
+  @IsOptional()
+  @ValidateIf((_, value) => !!value)
+  @IsInt()
+  skip?: number | null
+
+  @IsOptional()
+  @ValidateIf((_, value) => !!value)
+  @IsInt()
+  limit?: number | null
+
+  @IsOptional()
+  @IsDateString()
+  from?: Date;
+
+  @IsOptional()
+  @IsDateString()
+  to?: Date;
 }

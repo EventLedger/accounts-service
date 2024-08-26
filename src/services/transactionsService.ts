@@ -1,9 +1,9 @@
-import { Model } from 'mongoose'
+import { FilterQuery, Model } from 'mongoose'
 
 import { AccountsService } from './accountsService'
 import { ITransaction, Transaction } from '../models/transaction'
 import { BadRequestException } from '../utils/exceptions'
-import { CreateTransactionDto } from '../dto/transaction'
+import { CreateTransactionDto, ListTransactionsDto } from '../dto/transaction'
 import { SupportedCurrency } from '../constants/currencies'
 // import { AwsEventBridgeService } from './awsEventBridgeService';
 
@@ -20,7 +20,7 @@ export class TransactionsService {
   async createTransaction(createTransactionDto: CreateTransactionDto): Promise<ITransaction> {
     const transaction = new this.transactionModel(createTransactionDto)
     const account = await this.accountsService.getAccount(createTransactionDto.accountId)
-    
+
     this.ensureCurrencySupported(account.currencies, createTransactionDto.currency)
 
     if (createTransactionDto.type === 'INBOUND') {
@@ -49,8 +49,23 @@ export class TransactionsService {
     return transaction
   }
 
-  async getTransactions(accountId: string): Promise<ITransaction[]> {
-    return this.transactionModel.find({ accountId }).exec()
+  async getTransactions({
+    accountId,
+    limit,
+    skip,
+    from,
+    to,
+  }: ListTransactionsDto): Promise<{ transactions: ITransaction[]; total: number }> {
+    const dateFilter = this.createDateFilter(from, to)
+    const filter = {
+      accountId,
+      ...(from || to ? { date: dateFilter } : {}),
+    }
+
+    const transactions = await this.transactionModel.find(filter).limit(limit).skip(skip).exec()
+    const total = await this.transactionModel.countDocuments({ accountId }).exec()
+
+    return { transactions, total }
   }
 
   private ensureCurrencySupported(
@@ -71,5 +86,14 @@ export class TransactionsService {
         `Insufficient balance: Account has ${accountCurrencyBalance} ${currency}, but the transaction requires ${amount} ${currency}.`
       )
     }
+  }
+
+  private createDateFilter(from?: Date, to?: Date): FilterQuery<ITransaction['date']> {
+    const dateFilter: FilterQuery<ITransaction['date']> = {}
+
+    if (from) dateFilter.$gte = from
+    if (to) dateFilter.$lte = to
+
+    return dateFilter
   }
 }

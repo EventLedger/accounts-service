@@ -10,12 +10,17 @@ export interface ITransaction extends Document {
   date: Date
 }
 
-const TransactionSchema = new Schema<ITransaction>({
-  accountId: { type: Schema.Types.ObjectId, ref: 'Account', required: true },
-  type: { type: String, enum: Object.values(TransactionTypeMap), required: true },
-  currency: { type: String, required: true },
-  amount: { type: Number, required: true },
-  date: { type: Date, default: Date.now },
-})
+const TransactionSchema = new Schema<ITransaction>(
+  {
+    accountId: { type: Schema.Types.ObjectId, ref: 'Account', required: true },
+    type: { type: String, enum: Object.values(TransactionTypeMap), required: true },
+    currency: { type: String, required: true },
+    amount: { type: Number, required: true },
+    date: { type: Date, default: Date.now },
+  },
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+  }
+)
 
 export const Transaction = model<ITransaction>('Transaction', TransactionSchema)
