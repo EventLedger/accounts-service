@@ -37,14 +37,14 @@ functions:
     handler: build/handlers/createTransaction.handler
     events:
       - http:
-          path: accounts/{accountId}/transactions
+          path: transactions
           method: post
 
   getTransactions:
     handler: build/handlers/getTransactions.handler
     events:
       - http:
-          path: accounts/{accountId}/transactions
+          path: transactions/{accountId}
           method: get
 
 package:

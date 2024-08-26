@@ -9,7 +9,7 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
 
   const dbUri = process.env.MONGODB_URI
   if (!dbUri) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env')
+    throw new Error('MONGODB_URI environment variable not available')
   }
 
   try {

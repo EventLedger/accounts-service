@@ -17,5 +17,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": ["src/**/*"],                    // Specify which files to include
+  "exclude": ["node_modules", "build"]         // Specify which files to exclude
 }

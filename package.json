@@ -29,8 +29,6 @@
     "typescript": "^5.5.4"
   },
   "scripts": {
-    "start": "serverless deploy",
-    "dev": "serverless dev",
     "clean": "rm -rf dist build",
     "build": "npm run clean && tsc",
     "offline": "npm run build && serverless offline",

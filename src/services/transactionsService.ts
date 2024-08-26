@@ -20,7 +20,7 @@ export class TransactionsService {
   async createTransaction(createTransactionDto: CreateTransactionDto): Promise<ITransaction> {
     const transaction = new this.transactionModel(createTransactionDto)
     const account = await this.accountsService.getAccount(createTransactionDto.accountId)
-
+    
     this.ensureCurrencySupported(account.currencies, createTransactionDto.currency)
 
     if (createTransactionDto.type === 'INBOUND') {

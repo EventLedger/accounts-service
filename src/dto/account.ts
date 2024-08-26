@@ -42,7 +42,6 @@ export class UpdateAccountDto {
   @IsOptional()
   currencies: SupportedCurrency[]
 
-  // Making it optional, as balances might not be set on creation
   @IsOptional()
   @IsObject({ message: 'balances must be an object' })
   balances?: { [key: string]: number }

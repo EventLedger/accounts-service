@@ -2,7 +2,6 @@
   "trailingComma": "es5",
   "semi": false,
   "singleQuote": true,
-  "jsxSingleQuote": true,
   "printWidth": 100,
   "quoteProps": "as-needed",
   "tabWidth": 2,

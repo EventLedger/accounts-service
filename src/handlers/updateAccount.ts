@@ -3,8 +3,9 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { connectToDatabase } from '../utils/connectToDB'
 import { AccountsService } from '../services/accountsService'
 import { UpdateAccountDto } from '../dto/account'
+import { validationMiddleware } from '../utils/validationMiddleware'
 
-export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+const updateAccountHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   await connectToDatabase()
 
   const accountsService = new AccountsService()
@@ -26,3 +27,5 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
   }
 }
+
+export const handler = validationMiddleware(UpdateAccountDto, updateAccountHandler)
