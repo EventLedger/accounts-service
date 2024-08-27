@@ -1,10 +1,10 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { validate } from 'class-validator'
 import { plainToClass } from 'class-transformer'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
 export const validationMiddleware = <T extends Object>(
   dtoClass: new () => T,
-  handler: (event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult>
+  handler: (_event: APIGatewayProxyEvent) => Promise<APIGatewayProxyResult>
 ) => {
   return async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const dtoObject = plainToClass(dtoClass, JSON.parse(event.body || '{}'))

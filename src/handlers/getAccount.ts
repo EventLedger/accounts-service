@@ -1,25 +1,22 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
-import { connectToDatabase } from '../utils/connectToDB';
-import { AccountsService } from '../services/accountsService';
+import { connectToDatabase } from '../utils/connectToDB'
+import { AccountsService } from '../services/accountsService'
+import { withErrorHandling } from '../utils/withErrorHandling'
 
-export const handler = async (
+const getAccountHandler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
-  await connectToDatabase();
-  const accountsService = new AccountsService();
-  const accountId = event.pathParameters?.accountId;
+  await connectToDatabase()
+  const accountsService = new AccountsService()
+  const accountId = event.pathParameters?.accountId
 
-  try {
-    const account = await accountsService.getAccount(accountId!);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(account),
-    };
-  } catch (error) {
-    return {
-      statusCode: error.statusCode || 500,
-      body: JSON.stringify({ message: error.message }),
-    };
+  const account = await accountsService.getAccount(accountId!)
+  return {
+    statusCode: 200,
+    body: JSON.stringify(account),
   }
-};
+}
+
+export const handler = async (event: APIGatewayProxyEvent) =>
+  withErrorHandling(() => getAccountHandler(event))()

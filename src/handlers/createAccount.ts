@@ -4,27 +4,23 @@ import { CreateAccountDto } from '../dto/account'
 import { connectToDatabase } from '../utils/connectToDB'
 import { AccountsService } from '../services/accountsService'
 import { validationMiddleware } from '../utils/validationMiddleware'
+import { withErrorHandling } from '../utils/withErrorHandling'
 
 const createAccountHandler = async (
-  event: APIGatewayProxyEvent
+  event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
   await connectToDatabase()
   const accountsService = new AccountsService()
 
-  try {
-    const createAccountDto: CreateAccountDto = JSON.parse(event.body || '{}')
-    const account = await accountsService.createAccount(createAccountDto)
+  const createAccountDto: CreateAccountDto = JSON.parse(event.body || '{}')
+  const account = await accountsService.createAccount(createAccountDto)
 
-    return {
-      statusCode: 201,
-      body: JSON.stringify(account),
-    }
-  } catch (error) {
-    return {
-      statusCode: error.code || 500,
-      body: JSON.stringify({ message: error.message }),
-    }
+  return {
+    statusCode: 201,
+    body: JSON.stringify(account),
   }
 }
 
-export const handler = validationMiddleware(CreateAccountDto, createAccountHandler)
+export const handler = validationMiddleware(CreateAccountDto, async (event) =>
+  withErrorHandling(() => createAccountHandler(event))(),
+)

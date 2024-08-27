@@ -17,26 +17,35 @@ export class TransactionsService {
     this.accountsService = accountsService
   }
 
-  async createTransaction(createTransactionDto: CreateTransactionDto): Promise<ITransaction> {
+  async createTransaction(
+    createTransactionDto: CreateTransactionDto,
+  ): Promise<ITransaction> {
     const transaction = new this.transactionModel(createTransactionDto)
-    const account = await this.accountsService.getAccount(createTransactionDto.accountId)
+    const account = await this.accountsService.getAccount(
+      createTransactionDto.accountId,
+    )
 
-    this.ensureCurrencySupported(account.currencies, createTransactionDto.currency)
+    this.ensureCurrencySupported(
+      account.currencies,
+      createTransactionDto.currency,
+    )
 
     if (createTransactionDto.type === 'INBOUND') {
       account.balances.set(
         createTransactionDto.currency,
-        (account.balances.get(createTransactionDto.currency) || 0) + createTransactionDto.amount
+        (account.balances.get(createTransactionDto.currency) || 0) +
+          createTransactionDto.amount,
       )
     } else if (createTransactionDto.type === 'OUTBOUND') {
       this.ensureSufficientBalance(
         account.balances.get(createTransactionDto.currency) || 0,
-        createTransactionDto
+        createTransactionDto,
       )
 
       account.balances.set(
         createTransactionDto.currency,
-        (account.balances.get(createTransactionDto.currency) || 0) - createTransactionDto.amount
+        (account.balances.get(createTransactionDto.currency) || 0) -
+          createTransactionDto.amount,
       )
     }
 
@@ -55,45 +64,66 @@ export class TransactionsService {
     skip,
     from,
     to,
-  }: ListTransactionsDto): Promise<{ transactions: ITransaction[]; total: number }> {
-    const dateFilter = this.createDateFilter(from, to)
-    const filter = {
+  }: ListTransactionsDto): Promise<{
+    transactions: ITransaction[]
+    total: number
+  }> {
+    const account = await this.accountsService.getAccount(
       accountId,
-      ...(from || to ? { date: dateFilter } : {}),
+    )
+    const filter = {
+      accountId: account.id,
+      ...this.createDateFilter(from, to),
     }
 
-    const transactions = await this.transactionModel.find(filter).limit(limit).skip(skip).exec()
-    const total = await this.transactionModel.countDocuments({ accountId }).exec()
+    let query = this.transactionModel.find(filter)
+
+    if (limit && limit > 0) {
+      query = query.limit(limit)
+    }
+    if (skip && skip > 0) {
+      query = query.skip(skip)
+    }
+
+    const transactions = await query.exec()
+    const total = await this.transactionModel
+      .countDocuments({ accountId })
+      .exec()
 
     return { transactions, total }
   }
 
   private ensureCurrencySupported(
     supportedCurrencies: SupportedCurrency[],
-    currency: SupportedCurrency
+    currency: SupportedCurrency,
   ): void {
     if (!supportedCurrencies.includes(currency)) {
-      throw new BadRequestException(`Currency ${currency} is not supported by this account.`)
+      throw new BadRequestException(
+        `Currency ${currency} is not supported by this account.`,
+      )
     }
   }
 
   private ensureSufficientBalance(
     accountCurrencyBalance: number,
-    { currency, amount }: CreateTransactionDto
+    { currency, amount }: CreateTransactionDto,
   ): void {
     if (accountCurrencyBalance < amount) {
       throw new BadRequestException(
-        `Insufficient balance: Account has ${accountCurrencyBalance} ${currency}, but the transaction requires ${amount} ${currency}.`
+        `Insufficient balance: Account has ${accountCurrencyBalance} ${currency}, but the transaction requires ${amount} ${currency}.`,
       )
     }
   }
 
-  private createDateFilter(from?: Date, to?: Date): FilterQuery<ITransaction['date']> {
+  private createDateFilter(
+    from?: Date,
+    to?: Date,
+  ): FilterQuery<ITransaction['date']> {
     const dateFilter: FilterQuery<ITransaction['date']> = {}
 
     if (from) dateFilter.$gte = from
     if (to) dateFilter.$lte = to
 
-    return dateFilter
+    return from || to ? dateFilter : {}
   }
 }

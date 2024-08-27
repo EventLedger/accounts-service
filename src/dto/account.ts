@@ -22,7 +22,7 @@ export class CreateAccountDto {
   // Making it optional, as balances might not be set on creation
   @IsOptional()
   @IsObject({ message: 'balances must be an object' })
-  balances?: { [key: string]: number }
+  balances?: { [key: string]: number };
 }
 
 export class UpdateAccountDto {
@@ -44,5 +44,5 @@ export class UpdateAccountDto {
 
   @IsOptional()
   @IsObject({ message: 'balances must be an object' })
-  balances?: { [key: string]: number }
+  balances?: Record<string, number>
 }

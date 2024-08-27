@@ -15,7 +15,7 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
   try {
     cachedDbConnection = await mongoose.connect(dbUri)
     return cachedDbConnection
-  } catch (error) {
+  } catch (error: any) {
     cachedDbConnection = null
     throw new Error(`Failed to connect to MongoDB: ${error.message}`)
   }
