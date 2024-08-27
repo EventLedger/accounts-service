@@ -1,5 +1,2 @@
-.serverless
-serverless.yml
-.prettierrc
-.eslintrc.js
-README.md
+node_modules
+dist
