@@ -75,7 +75,7 @@ export class TransactionsService {
       accountId: account.id,
       ...this.createDateFilter(from, to),
     }
-
+    console.log({filter})
     let query = this.transactionModel.find(filter)
 
     if (limit && limit > 0) {
@@ -119,11 +119,11 @@ export class TransactionsService {
     from?: Date,
     to?: Date,
   ): FilterQuery<ITransaction['date']> {
-    const dateFilter: FilterQuery<ITransaction['date']> = {}
-
-    if (from) dateFilter.$gte = from
-    if (to) dateFilter.$lte = to
-
-    return from || to ? dateFilter : {}
-  }
+    const dateFilter: FilterQuery<ITransaction['date']> = {};
+  
+    if (from) dateFilter['date'] = { ...dateFilter['date'], $gte: from };
+    if (to) dateFilter['date'] = { ...dateFilter['date'], $lte: to };
+  
+    return dateFilter;
+  }  
 }
