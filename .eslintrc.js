@@ -25,18 +25,9 @@ module.exports = {
         allowArgumentsExplicitlyTypedAsAny: true,
       },
     ],
-    '@typescript-eslint/no-implicit-any-catch': 'error',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    '@typescript-eslint/ban-types': [
-      'error',
-      {
-        extendDefaults: true,
-        types: {
-          '{}': false,
-        },
-      },
-    ],
     'no-case-declarations': 'off',
   },
-}
+};
+

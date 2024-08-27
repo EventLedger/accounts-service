@@ -30,7 +30,7 @@ describe('getAccountHandler', () => {
       currencies: ['USD'],
       balances: { USD: 100 },
     })
-    const abc = await account.save()
+    await account.save()
 
     const event = {
       pathParameters: { accountId: account.id },
@@ -38,7 +38,7 @@ describe('getAccountHandler', () => {
 
     const result = await getAccountHandler(event)
     const body = JSON.parse(result.body)
-    
+
     expect(result.statusCode).toBe(200)
     expect(body.customerId).toBe('customerId123')
     expect(body.accountNumber).toBe('1234567890')

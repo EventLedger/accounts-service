@@ -29,7 +29,7 @@ const getTransactionsHandler = async (
     accountId: event.pathParameters?.accountId,
     ...sanitizeParamsFromQueryString(event.queryStringParameters),
   }
-  
+
   await withErrorHandling(() => validateDto(ListTransactionsDto, queryParams))
 
   const transactions = await transactionsService.getTransactions(
@@ -41,5 +41,7 @@ const getTransactionsHandler = async (
   }
 }
 
-export const handler = async (event: APIGatewayProxyEvent) =>
+export const handler = async (
+  event: APIGatewayProxyEvent,
+): Promise<APIGatewayProxyResult> =>
   withErrorHandling(() => getTransactionsHandler(event))()

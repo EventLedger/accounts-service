@@ -1,2 +1,7 @@
 node_modules
 dist
+serverless.yml
+README.md
+.eslintrc.js
+.github
+jest.config.js

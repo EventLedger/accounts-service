@@ -18,5 +18,7 @@ const getAccountHandler = async (
   }
 }
 
-export const handler = async (event: APIGatewayProxyEvent) =>
+export const handler = async (
+  event: APIGatewayProxyEvent,
+): Promise<APIGatewayProxyResult> =>
   withErrorHandling(() => getAccountHandler(event))()
