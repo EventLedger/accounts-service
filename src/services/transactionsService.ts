@@ -5,6 +5,7 @@ import { ITransaction, Transaction } from '../models/transaction'
 import { BadRequestException } from '../utils/exceptions'
 import { CreateTransactionDto, ListTransactionsDto } from '../dto/transaction'
 import { SupportedCurrency } from '../constants/currencies'
+import { TransactionTypeMap } from '../constants/transactionType'
 // import { AwsEventBridgeService } from './awsEventBridgeService';
 
 export class TransactionsService {
@@ -30,13 +31,13 @@ export class TransactionsService {
       createTransactionDto.currency,
     )
 
-    if (createTransactionDto.type === 'INBOUND') {
+    if (createTransactionDto.type === TransactionTypeMap.INBOUND) {
       account.balances.set(
         createTransactionDto.currency,
         (account.balances.get(createTransactionDto.currency) || 0) +
           createTransactionDto.amount,
       )
-    } else if (createTransactionDto.type === 'OUTBOUND') {
+    } else if (createTransactionDto.type === TransactionTypeMap.OUTBOUND) {
       this.ensureSufficientBalance(
         account.balances.get(createTransactionDto.currency) || 0,
         createTransactionDto,
@@ -75,9 +76,8 @@ export class TransactionsService {
       accountId: account.id,
       ...this.createDateFilter(from, to),
     }
-    console.log({filter})
-    let query = this.transactionModel.find(filter)
 
+    let query = this.transactionModel.find(filter)
     if (limit && limit > 0) {
       query = query.limit(limit)
     }

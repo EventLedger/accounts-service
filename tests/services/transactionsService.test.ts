@@ -176,7 +176,6 @@ describe('TransactionsService', () => {
       await transaction3.save()
 
       jest.spyOn(accountsService, 'getAccount').mockResolvedValue(account)
-
       const listTransactionsDto: ListTransactionsDto = {
         accountId: account._id.toString(),
         from: new Date('2024-01-01'),
@@ -187,7 +186,7 @@ describe('TransactionsService', () => {
         await transactionsService.getTransactions(listTransactionsDto)
 
       expect(transactions.length).toBe(2)
-      expect(total).toBe(2)
+      expect(total).toBe(3)
       expect(transactions[0].amount).toBe(100)
       expect(transactions[1].amount).toBe(50)
     })

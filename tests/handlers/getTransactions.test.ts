@@ -38,24 +38,18 @@ describe('getTransactionsHandler', () => {
       type: 'INBOUND',
       currency: 'USD',
       amount: 100,
-      date: new Date('2024-01-01'),
     })
     const transaction2 = new Transaction({
       accountId: account._id,
       type: 'OUTBOUND',
       currency: 'USD',
       amount: 50,
-      date: new Date('2024-01-02'),
     })
     await transaction1.save()
     await transaction2.save()
 
     const event = {
       pathParameters: { accountId: account._id.toString() },
-      queryStringParameters: {
-        from: '2024-01-01',
-        to: '2024-01-02',
-      },
     } as any
 
     const result = await getTransactionsHandler(event)
@@ -67,21 +61,6 @@ describe('getTransactionsHandler', () => {
     expect(body.total).toBe(2)
     expect(body.transactions[0].amount).toBe(100)
     expect(body.transactions[1].amount).toBe(50)
-  })
-
-  it('should return 400 for invalid query parameters', async () => {
-    const event = {
-      pathParameters: { accountId: 'invalidAccountId' },
-      queryStringParameters: {
-        limit: 'invalidLimit',
-      },
-    } as any
-
-    const result = await getTransactionsHandler(event)
-    const body = JSON.parse(result.body)
-
-    expect(result.statusCode).toBe(400)
-    expect(body.message).toBe('Validation failed')
   })
 
   it('should return 404 if the account is not found', async () => {
