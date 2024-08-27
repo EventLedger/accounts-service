@@ -1,14 +1,35 @@
 import { APIGatewayProxyResult } from 'aws-lambda'
 
-function isErrorWithCode(error: unknown): error is { code: number; message: string } {
-  return typeof error === 'object' && error !== null && 'code' in error && 'message' in error
+function isErrorWithStatusCode(
+  error: unknown,
+): error is {
+  code: number
+  statusCode: number
+  message: string
+  name: string
+  keyValue: string
+} {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    ('statusCode' in error || 'code' in error) &&
+    ('message' in error || 'keyValue' in error)
+  )
 }
 
 function handleError(error: unknown): APIGatewayProxyResult {
-  console.log({error})
-  if (isErrorWithCode(error)) {
+  if (isErrorWithStatusCode(error)) {
+    if (error.name === 'MongoServerError') {
+      return {
+        statusCode: 409,
+        body: JSON.stringify({
+          message: 'Duplicate key error',
+          errors: [error.keyValue]
+        }),
+      }
+    }
     return {
-      statusCode: error.code,
+      statusCode: error.statusCode,
       body: JSON.stringify({ message: error.message }),
     }
   }
@@ -20,13 +41,13 @@ function handleError(error: unknown): APIGatewayProxyResult {
 }
 
 export function withErrorHandling<T, Args extends any[]>(
-  fn: (...args: Args) => Promise<T>
+  fn: (...args: Args) => Promise<T>,
 ): (...args: Args) => Promise<APIGatewayProxyResult | T> {
   return async (...args: Args): Promise<APIGatewayProxyResult | T> => {
     try {
-      return await fn(...args);
+      return await fn(...args)
     } catch (error) {
-      return handleError(error);
+      return handleError(error)
     }
-  };
+  }
 }

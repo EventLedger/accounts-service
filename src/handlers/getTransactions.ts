@@ -29,7 +29,7 @@ const getTransactionsHandler = async (
     accountId: event.pathParameters?.accountId,
     ...sanitizeParamsFromQueryString(event.queryStringParameters),
   }
-  console.log({queryParams, string: event.queryStringParameters, path: event.pathParameters})
+  
   await withErrorHandling(() => validateDto(ListTransactionsDto, queryParams))
 
   const transactions = await transactionsService.getTransactions(
