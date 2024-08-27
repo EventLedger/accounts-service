@@ -11,7 +11,7 @@ const getAccountHandler = async (
   const accountsService = new AccountsService()
   const accountId = event.pathParameters?.accountId
 
-  const account = await accountsService.getAccount(accountId!)
+  const account = await accountsService.getAccount(accountId)
   return {
     statusCode: 200,
     body: JSON.stringify(account),

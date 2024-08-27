@@ -21,7 +21,7 @@ export class AccountsService {
     } else {
       this.initializeBalancesObject(createAccountDto)
     }
-
+    
     const newAccount = new this.accountModel(createAccountDto)
     await newAccount.save()
 

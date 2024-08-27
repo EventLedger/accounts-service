@@ -1,8 +1,6 @@
 import { APIGatewayProxyResult } from 'aws-lambda'
 
-function isErrorWithStatusCode(
-  error: unknown,
-): error is {
+function isErrorWithStatusCode(error: unknown): error is {
   code: number
   statusCode: number
   message: string
@@ -13,19 +11,29 @@ function isErrorWithStatusCode(
     typeof error === 'object' &&
     error !== null &&
     ('statusCode' in error || 'code' in error) &&
-    ('message' in error || 'keyValue' in error)
+    ('message' in error || 'keyValue' in error || 'reason' in error)
   )
 }
 
 function handleError(error: unknown): APIGatewayProxyResult {
   if (isErrorWithStatusCode(error)) {
     if (error.name === 'MongoServerError') {
-      return {
-        statusCode: 409,
-        body: JSON.stringify({
-          message: 'Duplicate key error',
-          errors: [error.keyValue]
-        }),
+      if (error.code === 11000) {
+        return {
+          statusCode: 409,
+          body: JSON.stringify({
+            message: 'Duplicate key error',
+            errors: [error.keyValue],
+          }),
+        }
+      } else {
+        return {
+          statusCode: 500,
+          body: JSON.stringify({
+            message: 'Unhandled mongoose error',
+            errors: [error.keyValue],
+          }),
+        }
       }
     }
     return {
@@ -36,7 +44,7 @@ function handleError(error: unknown): APIGatewayProxyResult {
 
   return {
     statusCode: 500,
-    body: JSON.stringify({ message: 'An unexpected error occurred' }),
+    body: JSON.stringify({ message: 'An unexpected error occurred', error: error }),
   }
 }
 
