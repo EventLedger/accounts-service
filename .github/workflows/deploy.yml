@@ -3,10 +3,10 @@ name: Deploy Main
 on:
   push:
     branches:
-      - deployment
+      - deployments
   pull_request:
     branches:
-      - deployment
+      - deployments
 
 jobs:
   lint:
