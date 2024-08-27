@@ -1,11 +1,10 @@
 // import request from 'supertest';
 // import { APIGatewayProxyEvent } from 'aws-lambda';
-// import { handler as createAccountHandler } from '../handlers/createAccount';
+// import { handler as createAccountHandler } from 'src/';
 // import { handler as getAccountHandler } from '../handlers/getAccount';
-// import { connectToDatabase } from '../utils/';
 
 // beforeAll(async () => {
-//   await connectToDatabase();
+//   await connectTo();
 // });
 
 // describe('Account Handlers', () => {

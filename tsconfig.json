@@ -18,5 +18,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "strict": true
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/jest.setup.ts",
+    "tests/**/*.test.ts"
+  ],
+  "exclude": ["node_modules"]
 }

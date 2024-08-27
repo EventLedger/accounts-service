@@ -19,7 +19,7 @@ function isErrorWithStatusCode(
 
 function handleError(error: unknown): APIGatewayProxyResult {
   if (isErrorWithStatusCode(error)) {
-    if (error.name === 'MongoServerError') {
+    if (error.name === 'MongoServerError' && error.code === 11000) {
       return {
         statusCode: 409,
         body: JSON.stringify({

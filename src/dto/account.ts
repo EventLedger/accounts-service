@@ -28,11 +28,11 @@ export class CreateAccountDto {
 export class UpdateAccountDto {
   @IsString()
   @IsOptional()
-  customerId: string
+  customerId?: string
 
   @IsString()
   @IsOptional()
-  accountNumber: string
+  accountNumber?: string
 
   @IsArray()
   @IsIn(SUPPORTED_CURRENCIES, {
@@ -40,7 +40,7 @@ export class UpdateAccountDto {
     message: 'Unsupported currency detected',
   })
   @IsOptional()
-  currencies: SupportedCurrency[]
+  currencies?: SupportedCurrency[]
 
   @IsOptional()
   @IsObject({ message: 'balances must be an object' })
