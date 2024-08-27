@@ -18,7 +18,10 @@ const AccountSchema = new Schema<IAccount>(
   },
   {
     timestamps: true,
-  }
+  },
 )
 
-export const Account: Model<IAccount> = model<IAccount>('Account', AccountSchema)
+export const Account: Model<IAccount> = model<IAccount>(
+  'Account',
+  AccountSchema,
+)

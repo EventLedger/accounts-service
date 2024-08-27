@@ -69,9 +69,7 @@ export class TransactionsService {
     transactions: ITransaction[]
     total: number
   }> {
-    const account = await this.accountsService.getAccount(
-      accountId,
-    )
+    const account = await this.accountsService.getAccount(accountId)
     const filter = {
       accountId: account.id,
       ...this.createDateFilter(from, to),
@@ -119,11 +117,11 @@ export class TransactionsService {
     from?: Date,
     to?: Date,
   ): FilterQuery<ITransaction['date']> {
-    const dateFilter: FilterQuery<ITransaction['date']> = {};
-  
-    if (from) dateFilter['date'] = { ...dateFilter['date'], $gte: from };
-    if (to) dateFilter['date'] = { ...dateFilter['date'], $lte: to };
-  
-    return dateFilter;
-  }  
+    const dateFilter: FilterQuery<ITransaction['date']> = {}
+
+    if (from) dateFilter['date'] = { ...dateFilter['date'], $gte: from }
+    if (to) dateFilter['date'] = { ...dateFilter['date'], $lte: to }
+
+    return dateFilter
+  }
 }

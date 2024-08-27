@@ -129,9 +129,9 @@ describe('Transaction Model Test Suite', () => {
     const fetchedTransaction = await Transaction.findById(
       savedTransaction._id,
     ).populate('accountId')
-    
+
     expect(fetchedTransaction).toBeDefined()
     expect(fetchedTransaction!.accountId._id).toEqual(account._id)
-    expect(fetchedTransaction!.accountId['customerId']).toBe('customerId123');
+    expect(fetchedTransaction!.accountId['customerId']).toBe('customerId123')
   })
 })

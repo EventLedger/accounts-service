@@ -1,6 +1,16 @@
-import { IsNotEmpty, IsString, IsArray, IsOptional, IsIn, IsObject } from 'class-validator'
+import {
+  IsNotEmpty,
+  IsString,
+  IsArray,
+  IsOptional,
+  IsIn,
+  IsObject,
+} from 'class-validator'
 
-import { SUPPORTED_CURRENCIES, SupportedCurrency } from '../constants/currencies'
+import {
+  SUPPORTED_CURRENCIES,
+  SupportedCurrency,
+} from '../constants/currencies'
 
 export class CreateAccountDto {
   @IsNotEmpty()
@@ -22,7 +32,7 @@ export class CreateAccountDto {
   // Making it optional, as balances might not be set on creation
   @IsOptional()
   @IsObject({ message: 'balances must be an object' })
-  balances?: { [key: string]: number };
+  balances?: { [key: string]: number }
 }
 
 export class UpdateAccountDto {

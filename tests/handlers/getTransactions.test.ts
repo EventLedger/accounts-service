@@ -56,7 +56,7 @@ describe('getTransactionsHandler', () => {
 
     expect(result.statusCode).toBe(200)
     const body = JSON.parse(result.body)
-    
+
     expect(body.transactions.length).toBe(2)
     expect(body.total).toBe(2)
     expect(body.transactions[0].amount).toBe(100)

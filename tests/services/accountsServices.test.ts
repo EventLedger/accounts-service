@@ -3,7 +3,10 @@ import mongoose from 'mongoose'
 import { Account } from '../../src/models/account'
 import { AccountsService } from '../../src/services/accountsService'
 import { CreateAccountDto, UpdateAccountDto } from '../../src/dto/account'
-import { BadRequestException, NotFoundException } from '../../src/utils/exceptions'
+import {
+  BadRequestException,
+  NotFoundException,
+} from '../../src/utils/exceptions'
 
 describe('AccountsService', () => {
   let accountsService: AccountsService
@@ -23,7 +26,7 @@ describe('AccountsService', () => {
 
       const result = await accountsService.createAccount(createAccountDto)
       const accountInDb = await Account.findById(result.id)
-      
+
       expect(accountInDb).not.toBeNull()
       expect(result.customerId).toEqual(createAccountDto.customerId)
       expect(result.accountNumber).toEqual(createAccountDto.accountNumber)
@@ -36,7 +39,7 @@ describe('AccountsService', () => {
         customerId: 'customerId123',
         accountNumber: '1234567890',
         currencies: ['USD'],
-        balances: { 'ABC': 123 },
+        balances: { ABC: 123 },
       }
 
       await expect(
@@ -45,17 +48,17 @@ describe('AccountsService', () => {
     })
 
     it('should throw a BadRequestException for invalid balances', async () => {
-        const createAccountDto: CreateAccountDto = {
-          customerId: 'customerId123',
-          accountNumber: '1234567890',
-          currencies: ['USD'],
-          balances: { 'USD': -123 }
-        }
-  
-        await expect(
-          accountsService.createAccount(createAccountDto),
-        ).rejects.toThrow(BadRequestException)
-      })
+      const createAccountDto: CreateAccountDto = {
+        customerId: 'customerId123',
+        accountNumber: '1234567890',
+        currencies: ['USD'],
+        balances: { USD: -123 },
+      }
+
+      await expect(
+        accountsService.createAccount(createAccountDto),
+      ).rejects.toThrow(BadRequestException)
+    })
   })
 
   describe('getAccount', () => {
@@ -123,17 +126,17 @@ describe('AccountsService', () => {
     })
 
     it('should throw a BadRequestException for invalid currency in balances', async () => {
-        const nonExistentId = new mongoose.Types.ObjectId()
-        const updateAccountDto: UpdateAccountDto = {
-          balances: { 'CNY': 124 },
-        }
-  
-        await expect(
-          accountsService.updateAccount(
-            nonExistentId.toHexString(),
-            updateAccountDto,
-          ),
-        ).rejects.toThrow(NotFoundException)
-      })
+      const nonExistentId = new mongoose.Types.ObjectId()
+      const updateAccountDto: UpdateAccountDto = {
+        balances: { CNY: 124 },
+      }
+
+      await expect(
+        accountsService.updateAccount(
+          nonExistentId.toHexString(),
+          updateAccountDto,
+        ),
+      ).rejects.toThrow(NotFoundException)
+    })
   })
 })

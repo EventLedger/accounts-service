@@ -44,7 +44,10 @@ function handleError(error: unknown): APIGatewayProxyResult {
 
   return {
     statusCode: 500,
-    body: JSON.stringify({ message: 'An unexpected error occurred', error: error }),
+    body: JSON.stringify({
+      message: 'An unexpected error occurred',
+      error: error,
+    }),
   }
 }
 

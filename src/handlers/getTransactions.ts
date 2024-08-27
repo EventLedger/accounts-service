@@ -41,5 +41,7 @@ const getTransactionsHandler = async (
   }
 }
 
-export const handler = async (event: APIGatewayProxyEvent) =>
+export const handler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> =>
   withErrorHandling(() => getTransactionsHandler(event))()

@@ -1,6 +1,20 @@
-import { IsNotEmpty, IsString, IsNumber, IsEnum, IsIn, IsInt, Min, IsOptional, IsDateString, ValidateIf } from 'class-validator'
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsEnum,
+  IsIn,
+  IsInt,
+  Min,
+  IsOptional,
+  IsDateString,
+  ValidateIf,
+} from 'class-validator'
 
-import { SUPPORTED_CURRENCIES, SupportedCurrency } from '../constants/currencies'
+import {
+  SUPPORTED_CURRENCIES,
+  SupportedCurrency,
+} from '../constants/currencies'
 
 export class CreateTransactionDto {
   @IsNotEmpty()
@@ -41,9 +55,9 @@ export class ListTransactionsDto {
 
   @IsOptional()
   @IsDateString()
-  from?: Date;
+  from?: Date
 
   @IsOptional()
   @IsDateString()
-  to?: Date;
+  to?: Date
 }
