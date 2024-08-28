@@ -4,12 +4,15 @@ import { Account, IAccount } from '../models/account'
 import { CreateAccountDto, UpdateAccountDto } from '../dto/account'
 import { BadRequestException, NotFoundException } from '../utils/exceptions'
 import { SupportedCurrency } from '../constants/currencies'
+import { AwsEventBridgeService } from './awsEventBridgeService'
 
 export class AccountsService {
   private accountModel: Model<IAccount>
+  private eventBridgeService: AwsEventBridgeService;
 
   constructor() {
-    this.accountModel = Account // Inject the model correctly
+    this.accountModel = Account
+    this.eventBridgeService = new AwsEventBridgeService()
   }
 
   async createAccount(createAccountDto: CreateAccountDto): Promise<IAccount> {
@@ -24,7 +27,8 @@ export class AccountsService {
 
     const newAccount = new this.accountModel(createAccountDto)
     await newAccount.save()
-
+    
+    this.eventBridgeService.publishEvent('AccountCreated', newAccount);
     return newAccount
   }
 
@@ -57,6 +61,7 @@ export class AccountsService {
     Object.assign(account, updateAccountDto)
     const updatedAccount = await account.save()
 
+    this.eventBridgeService.publishEvent('AccountUpdated', updatedAccount);
     return updatedAccount
   }
 

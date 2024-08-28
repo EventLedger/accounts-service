@@ -6,16 +6,17 @@ import { BadRequestException } from '../utils/exceptions'
 import { CreateTransactionDto, ListTransactionsDto } from '../dto/transaction'
 import { SupportedCurrency } from '../constants/currencies'
 import { TransactionTypeMap } from '../constants/transactionType'
-// import { AwsEventBridgeService } from './awsEventBridgeService';
+import { AwsEventBridgeService } from './awsEventBridgeService';
 
 export class TransactionsService {
   private transactionModel: Model<ITransaction>
   private accountsService: AccountsService
-  // private eventBridgeService: AwsEventBridgeService;
+  private eventBridgeService: AwsEventBridgeService;
 
   constructor(accountsService: AccountsService) {
     this.transactionModel = Transaction
     this.accountsService = accountsService
+    this.eventBridgeService = new AwsEventBridgeService()
   }
 
   async createTransaction(
@@ -53,9 +54,7 @@ export class TransactionsService {
     await account.save()
     await transaction.save()
 
-    // Optionally publish event to EventBridge
-    // this.eventBridgeService.publishEvent('TransactionCreated', transaction);
-
+    this.eventBridgeService.publishEvent('TransactionCreated', transaction);
     return transaction
   }
 

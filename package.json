@@ -4,7 +4,7 @@
   "description": "",
   "dependencies": {
     "aws-lambda": "^1.0.7",
-    "aws-sdk": "^2.1681.0",
+    "aws-sdk": "^2.1684.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "express": "^4.19.2",
@@ -24,6 +24,7 @@
     "mongodb-memory-server": "^10.0.0",
     "prettier": "^3.3.3",
     "serverless-offline": "^13.7.0",
+    "serverless-prune-plugin": "^2.0.2",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.5.4"
