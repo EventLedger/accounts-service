@@ -5,53 +5,95 @@ service: accounts-service
 provider:
   name: aws
   runtime: nodejs20.x
-  # region: us-east-1
+  region: eu-north-1
   environment:
     MONGODB_URI: "mongodb+srv://root:orbital-password@orbital-test-0.5brqv.mongodb.net/?retryWrites=true&w=majority&appName=orbital-test-0"
     # MONGODB_URI: ${ssm:/accounts-service/MONGODB_URI}
     # EVENT_BUS_NAME: ${ssm:/my-service/EVENT_BUS_NAME~true}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource:
+            - arn:aws:events:eu-north-1:586064767793:event-bus/default
 
 functions:
   createAccount:
-    handler: dist/src/handlers/createAccount.handler
+    handler: src/handlers/createAccount.handler
     events:
       - http:
           path: accounts
           method: post
 
   getAccount:
-    handler: dist/src/handlers/getAccount.handler
+    handler: src/handlers/getAccount.handler
     events:
       - http:
           path: accounts/{accountId}
           method: get
 
   updateAccount:
-    handler: dist/src/handlers/updateAccount.handler
+    handler: src/handlers/updateAccount.handler
     events:
       - http:
           path: accounts/{accountId}
           method: put
 
   createTransaction:
-    handler: dist/src/handlers/createTransaction.handler
+    handler: src/handlers/createTransaction.handler
     events:
       - http:
           path: transactions
           method: post
 
   getTransactions:
-    handler: dist/src/handlers/getTransactions.handler
+    handler: src/handlers/getTransactions.handler
     events:
       - http:
           path: transactions/{accountId}
           method: get
 
 package:
+  individually: true
   exclude:
-    - node_modules/**
-    - src/tests/**
-    - dist/**
+    # - node_modules/**
+    - coverage/**
+    - tests/**
+    # - src/**
+    - jest.config.js
+    - README.md
+    # - tsconfig.json
+    # - tsconfig.build.json
+    # - .eslintrc.js
+    - .prettierrc
+    - .gitignore
+    - .git/**
+    - .github/**
+  # include:
+  #   - dist/**
+  #   - node_modules/**
 
 plugins:
+  # - serverless-esbuild
   - serverless-offline
+
+# package:
+#   # ESBuild will handle bundling, so no need for manual include/exclude
+#   individually: true
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: false
+    target: "node20"
+    platform: "node"
+    exclude: 
+      - "aws-sdk"
+      - "jest"
+      - "mongodb-memory-server"
+      - "prettier"
+    # ["aws-sdk", "jest", "mongodb-memory-server", "prettier"]
+    buildConcurrency: 10

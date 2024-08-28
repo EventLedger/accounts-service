@@ -14,7 +14,7 @@ const createAccountHandler = async (
 
   const createAccountDto: CreateAccountDto = JSON.parse(event.body || '{}')
   const account = await accountsService.createAccount(createAccountDto)
-
+  
   return {
     statusCode: 201,
     body: JSON.stringify(account),
