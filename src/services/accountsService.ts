@@ -1,5 +1,6 @@
 import { Model } from 'mongoose'
 
+import { Events } from '../constants/events'
 import { Account, IAccount } from '../models/account'
 import { CreateAccountDto, UpdateAccountDto } from '../dto/account'
 import { BadRequestException, NotFoundException } from '../utils/exceptions'
@@ -28,7 +29,7 @@ export class AccountsService {
     const newAccount = new this.accountModel(createAccountDto)
     await newAccount.save()
 
-    await this.eventBridgeService.publishEvent('AccountCreated', newAccount)
+    await this.eventBridgeService.publishEvent(Events.AccountCreated, newAccount)
     return newAccount
   }
 
@@ -61,7 +62,7 @@ export class AccountsService {
     Object.assign(account, updateAccountDto)
     const updatedAccount = await account.save()
 
-    this.eventBridgeService.publishEvent('AccountUpdated', updatedAccount)
+    this.eventBridgeService.publishEvent(Events.AccountUpdated, updatedAccount)
     return updatedAccount
   }
 

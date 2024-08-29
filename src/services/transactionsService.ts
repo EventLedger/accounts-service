@@ -7,6 +7,7 @@ import { CreateTransactionDto, ListTransactionsDto } from '../dto/transaction'
 import { SupportedCurrency } from '../constants/currencies'
 import { TransactionTypeMap } from '../constants/transactionType'
 import { AwsEventBridgeService } from './awsEventBridgeService'
+import { Events } from '../constants/events'
 
 export class TransactionsService {
   private transactionModel: Model<ITransaction>
@@ -54,7 +55,13 @@ export class TransactionsService {
     await account.save()
     await transaction.save()
 
-    this.eventBridgeService.publishEvent('TransactionCreated', transaction)
+    this.eventBridgeService.publishEvent(Events.TransactionCreated, {
+      type: transaction.type,
+      amount: transaction.amount,
+      currency: transaction.currency,
+      accountId: transaction.accountId,
+      date: transaction.date || new Date()
+    })
 
     return transaction
   }

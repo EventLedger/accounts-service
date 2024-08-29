@@ -40,6 +40,9 @@ functions:
       - http:
           path: accounts/{accountId}
           method: put
+    # environment: 
+    #   SOURCE_NAME: 
+    #   DETAIL_TYPE: TransactionCreated
 
   createTransaction:
     handler: src/handlers/createTransaction.handler
