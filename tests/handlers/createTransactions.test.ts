@@ -62,7 +62,7 @@ describe('createTransactionHandler', () => {
     const body = JSON.parse(result.body)
 
     expect(result.statusCode).toBe(400)
-    expect(body.message).toBe('Validation failed')
+    expect(body.message).toBe('Validation Error')
   })
 
   it('should return 404 if the account is not found', async () => {

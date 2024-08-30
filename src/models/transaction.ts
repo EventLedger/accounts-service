@@ -1,4 +1,5 @@
 import { Schema, Document, model, Types } from 'mongoose'
+
 import { TransactionType } from '../constants/transactionType'
 
 export interface ITransaction extends Document {

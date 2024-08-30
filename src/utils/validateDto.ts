@@ -19,7 +19,7 @@ export async function validateDto<T extends object>(
 
       throw new BadRequestException(
         JSON.stringify({
-          message: 'Validation failed',
+          message: 'Validation Error',
           errors: formattedErrors,
         }),
       )

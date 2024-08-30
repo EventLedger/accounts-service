@@ -52,7 +52,7 @@ describe('createAccountHandler', () => {
     const body = JSON.parse(result.body)
 
     expect(result.statusCode).toBe(400)
-    expect(body.message).toBe('Validation failed')
+    expect(body.message).toBe('Validation Error')
   })
 
   it('should return 409 status when duplicate account is created', async () => {

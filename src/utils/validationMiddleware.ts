@@ -21,7 +21,7 @@ export const validationMiddleware = <T extends object>(
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: 'Validation failed',
+          message: 'Validation Error',
           errors: formattedErrors,
         }),
       }
