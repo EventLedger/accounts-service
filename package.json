@@ -31,8 +31,8 @@
   "scripts": {
     "clean": "rm -rf dist build",
     "build": "npm run clean && tsc",
-    "deploy": "serverless deploy -s dev -v",
-    "deploy:prod": "serverless deploy -s production -v",
+    "deploy": "serverless deploy -s dev",
+    "deploy:prod": "serverless deploy -s production",
     "offline": "npm run build && serverless offline",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
