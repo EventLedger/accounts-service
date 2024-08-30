@@ -13,12 +13,14 @@ const updateAccountHandler = async (
 
   const accountsService = new AccountsService()
   const accountId = event.pathParameters?.accountId
-  const updateAccountDto: UpdateAccountDto = JSON.parse(event.body || '{}')
+  const { customerId, accountNumber, currencies }: UpdateAccountDto =
+    JSON.parse(event.body || '{}')
 
-  const updatedAccount = await accountsService.updateAccount(
-    accountId!,
-    updateAccountDto,
-  )
+  const updatedAccount = await accountsService.updateAccount(accountId!, {
+    customerId,
+    accountNumber,
+    currencies,
+  })
   return {
     statusCode: 200,
     body: JSON.stringify(updatedAccount),

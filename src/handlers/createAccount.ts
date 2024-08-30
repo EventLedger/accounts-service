@@ -12,8 +12,13 @@ const createAccountHandler = async (
   await connectToDatabase()
   const accountsService = new AccountsService()
 
-  const createAccountDto: CreateAccountDto = JSON.parse(event.body || '{}')
-  const account = await accountsService.createAccount(createAccountDto)
+  const { accountNumber, customerId, currencies }: CreateAccountDto =
+    JSON.parse(event.body || '{}')
+  const account = await accountsService.createAccount({
+    accountNumber,
+    customerId,
+    currencies,
+  })
 
   return {
     statusCode: 201,
