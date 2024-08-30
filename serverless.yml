@@ -7,9 +7,12 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1
   environment:
-    MONGODB_URI: "mongodb+srv://root:orbital-password@orbital-test-0.5brqv.mongodb.net/?retryWrites=true&w=majority&appName=orbital-test-0"
-    # MONGODB_URI: ${ssm:/accounts-service/MONGODB_URI}
-    # EVENT_BUS_NAME: ${ssm:/my-service/EVENT_BUS_NAME~true}
+    MONGODB_URI: ${param:MONGODB_URI}
+    EVENT_BUS_NAME: ${param:EVENT_BUS_NAME}
+    EVENT_SOURCE: ${param:EVENT_SOURCE}
+    AWS_ACCOUNT_ID: ${param:AWS_ACCOUNT_ID}
+    AWS_REGION: ${param:AWS_REGION}
+  
   iam:
     role:
       statements:
@@ -17,7 +20,7 @@ provider:
           Action:
             - events:PutEvents
           Resource:
-            - arn:aws:events:eu-north-1:586064767793:event-bus/default
+            - arn:aws:events:${param:AWS_REGION}:${param:AWS_ACCOUNT_ID}:event-bus/${param:EVENT_BUS_NAME}
 
 functions:
   createAccount:

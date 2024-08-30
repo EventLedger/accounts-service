@@ -8,7 +8,7 @@ export class AwsEventBridgeService {
 
   constructor() {
     this.eventBridge = new EventBridge({
-      region: 'eu-north-1',
+      region: process.env.AWS_REGION,
     })
   }
 
@@ -19,10 +19,10 @@ export class AwsEventBridgeService {
     const params = {
       Entries: [
         {
-          Source: 'accounts-service',
+          Source: process.env.EVENT_SOURCE,
           DetailType: eventType,
           Detail: JSON.stringify(eventDetail),
-          EventBusName: 'default',
+          EventBusName: process.env.EVENT_BUS_NAME,
           Time: new Date(),
         },
       ],
