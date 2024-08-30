@@ -6,8 +6,8 @@ import { ITransaction, Transaction } from '../models/transaction'
 import { BadRequestException } from '../utils/exceptions'
 import { CreateTransactionDto, ListTransactionsDto } from '../dto/transaction'
 import { SupportedCurrency } from '../constants/currencies'
-import { TransactionTypeMap } from '../constants/transactionType'
 import { AwsEventBridgeService } from './awsEventBridgeService'
+import { TransactionType } from '../constants/transactionType'
 
 export class TransactionsService {
   private transactionModel: Model<ITransaction>
@@ -33,13 +33,13 @@ export class TransactionsService {
       createTransactionDto.currency,
     )
 
-    if (createTransactionDto.type === TransactionTypeMap.INBOUND) {
+    if (createTransactionDto.type === TransactionType.INBOUND) {
       account.balances.set(
         createTransactionDto.currency,
         (account.balances.get(createTransactionDto.currency) || 0) +
           createTransactionDto.amount,
       )
-    } else if (createTransactionDto.type === TransactionTypeMap.OUTBOUND) {
+    } else if (createTransactionDto.type === TransactionType.OUTBOUND) {
       this.ensureSufficientBalance(
         account.balances.get(createTransactionDto.currency) || 0,
         createTransactionDto,

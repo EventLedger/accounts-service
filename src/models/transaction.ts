@@ -1,9 +1,5 @@
 import { Schema, Document, model, Types } from 'mongoose'
-
-import {
-  TransactionType,
-  TransactionTypeMap,
-} from '../constants/transactionType'
+import { TransactionType } from '../constants/transactionType'
 
 export interface ITransaction extends Document {
   accountId: Types.ObjectId
@@ -18,7 +14,7 @@ const TransactionSchema = new Schema<ITransaction>(
     accountId: { type: Schema.Types.ObjectId, ref: 'Account', required: true },
     type: {
       type: String,
-      enum: Object.values(TransactionTypeMap),
+      enum: Object.values(TransactionType),
       required: true,
     },
     currency: { type: String, required: true },

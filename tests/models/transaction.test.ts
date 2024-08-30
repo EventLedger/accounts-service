@@ -3,10 +3,7 @@ import mongoose from 'mongoose'
 import { Transaction, ITransaction } from '../../src/models/transaction'
 import { Account, IAccount } from '../../src/models/account'
 import { connectToDatabase } from '../../src/utils/connectToDB'
-import {
-  TransactionType,
-  TransactionTypeMap,
-} from '../../src/constants/transactionType'
+import { TransactionType } from '../../src/constants/transactionType'
 
 jest.mock('../../src/utils/connectToDB')
 
@@ -34,7 +31,7 @@ describe('Transaction Model Test Suite', () => {
   it('should create and save a new transaction successfully', async () => {
     const validTransactionData: Partial<ITransaction> = {
       accountId: account.id,
-      type: TransactionTypeMap.INBOUND,
+      type: TransactionType.INBOUND,
       currency: 'USD',
       amount: 50,
     }
@@ -44,7 +41,7 @@ describe('Transaction Model Test Suite', () => {
 
     expect(savedTransaction._id).toBeDefined()
     expect(savedTransaction.accountId).toEqual(account._id)
-    expect(savedTransaction.type).toBe(TransactionTypeMap.INBOUND)
+    expect(savedTransaction.type).toBe(TransactionType.INBOUND)
     expect(savedTransaction.currency).toBe('USD')
     expect(savedTransaction.amount).toBe(50)
     expect(savedTransaction.date).toBeDefined()
@@ -99,7 +96,7 @@ describe('Transaction Model Test Suite', () => {
   it('should default the date to the current date', async () => {
     const transactionData: Partial<ITransaction> = {
       accountId: account.id,
-      type: TransactionTypeMap.OUTBOUND,
+      type: TransactionType.OUTBOUND,
       currency: 'USD',
       amount: 25,
     }
@@ -118,7 +115,7 @@ describe('Transaction Model Test Suite', () => {
   it('should reference the correct account', async () => {
     const transactionData: Partial<ITransaction> = {
       accountId: account.id,
-      type: TransactionTypeMap.OUTBOUND,
+      type: TransactionType.OUTBOUND,
       currency: 'USD',
       amount: 25,
     }

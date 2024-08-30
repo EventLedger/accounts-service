@@ -1,12 +1,7 @@
 import { EventBridge } from 'aws-sdk'
 
 import { InternalServerError } from '../utils/exceptions'
-import {
-  Events,
-  IAccountCreated,
-  IAccountUpdated,
-  ITransactionCreated,
-} from '../constants/events'
+import { Events, AccountEvent, TransactionEvent } from '../constants/events'
 
 export class AwsEventBridgeService {
   private eventBridge: AWS.EventBridge
@@ -19,7 +14,7 @@ export class AwsEventBridgeService {
 
   async publishEvent(
     eventType: Events,
-    eventDetail: IAccountCreated | IAccountUpdated | ITransactionCreated,
+    eventDetail: AccountEvent | TransactionEvent,
   ): Promise<void> {
     const params = {
       Entries: [

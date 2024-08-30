@@ -35,7 +35,7 @@ export class AccountsService {
       customerId,
       currencies,
       balances,
-      createdAt: new Date(),
+      date: new Date(),
     })
 
     return newAccount
@@ -76,8 +76,7 @@ export class AccountsService {
       customerId,
       currencies,
       balances,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      date: new Date(),
     })
 
     return updatedAccount
