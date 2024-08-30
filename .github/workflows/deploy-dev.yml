@@ -52,5 +52,5 @@ jobs:
         run: npm ci
 
       - name: Deploy
-        run: serverless deploy --stage dev 
+        run: npm run deploy
       
