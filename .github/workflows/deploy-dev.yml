@@ -48,11 +48,14 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install serverless
+        run: npm install -g serverless
+
       - name: Install dependencies
-        run: npm ci
+        run: npm insta;;
 
       - name: Deploy
-        run: npm run deploy
+        run: serverless deploy
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI_DEV }}
           EVENT_BUS_NAME: ${{ secrets.EVENT_BUS_NAME_DEV }}
