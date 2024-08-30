@@ -6,7 +6,7 @@ import { CreateAccountDto, UpdateAccountDto } from '../dto/account'
 import { NotFoundException } from '../utils/exceptions'
 import { SupportedCurrency } from '../constants/currencies'
 import { AwsEventBridgeService } from './awsEventBridgeService'
-import { filterUndefined } from 'src/utils/filterUndefined'
+import { filterUndefined } from '../utils/filterUndefined'
 
 export class AccountsService {
   private accountModel: Model<IAccount>
