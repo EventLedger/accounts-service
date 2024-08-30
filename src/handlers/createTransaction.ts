@@ -20,7 +20,7 @@ const createTransactionHandler = async (
   )
   const transaction =
     await transactionsService.createTransaction(createTransactionDto)
-  
+
   return {
     statusCode: 201,
     body: JSON.stringify(transaction),

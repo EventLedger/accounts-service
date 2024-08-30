@@ -1,4 +1,4 @@
-import { TransactionType } from "./transactionType";
+import { TransactionType } from './transactionType'
 
 export enum Events {
   AccountCreated = 'AccountCreated',
@@ -7,12 +7,12 @@ export enum Events {
 }
 
 export interface TransactionEvent {
-  id: string;
-  accountId: string;
-  currency: string;
-  amount: number;
-  type: TransactionType;
-  date: Date;
+  id: string
+  accountId: string
+  currency: string
+  amount: number
+  type: TransactionType
+  date: Date
 }
 
 export interface AccountEvent {

@@ -51,7 +51,7 @@ function handleError(error: unknown): APIGatewayProxyResult {
       }
     }
   }
-  
+
   if (isErrorWithStatusCode(error)) {
     return {
       statusCode: error.statusCode,
