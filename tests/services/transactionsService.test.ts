@@ -10,7 +10,7 @@ import {
   ListTransactionsDto,
 } from '../../src/dto/transaction'
 
-jest.mock('../../src/services/accountsService')
+// jest.mock('../../src/services/accountsService')
 jest.mock('aws-sdk', () => {
   const EventBridge = {
     putEvents: jest.fn().mockReturnThis(),
