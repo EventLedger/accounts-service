@@ -17,9 +17,14 @@ export class AccountsService {
   }
 
   async createAccount(createAccountDto: CreateAccountDto): Promise<IAccount> {
-    this.initializeBalancesObject(createAccountDto)
+    const initialBalances = this.initializeBalancesObject(
+      createAccountDto.currencies,
+    )
 
-    const newAccount = new this.accountModel(createAccountDto)
+    const newAccount = new this.accountModel({
+      ...createAccountDto,
+      balances: initialBalances,
+    })
     await newAccount.save()
 
     const { id, customerId, currencies, balances } = newAccount
@@ -52,8 +57,6 @@ export class AccountsService {
     if (updateAccountDto.currencies) {
       this.updateBalancesForNewCurrencies(account, updateAccountDto.currencies)
     }
-
-    Object.assign(account, updateAccountDto)
     const updatedAccount = await account.save()
 
     const { id, customerId, currencies, balances } = updatedAccount
@@ -68,9 +71,11 @@ export class AccountsService {
     return updatedAccount
   }
 
-  private initializeBalancesObject(createAccountDto: CreateAccountDto) {
+  private initializeBalancesObject(currencies: CreateAccountDto['currencies']) {
     const balances: IAccount['balances'] = new Map()
-    createAccountDto.currencies.forEach((currency) => (balances[currency] = 0))
+    currencies.forEach((currency) => balances.set(currency, 0))
+
+    return balances
   }
 
   private updateBalancesForNewCurrencies(
