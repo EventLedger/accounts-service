@@ -1,5 +1,6 @@
 import { FilterQuery, Model } from 'mongoose'
 
+import { Events } from '../constants/events'
 import { AccountsService } from './accountsService'
 import { ITransaction, Transaction } from '../models/transaction'
 import { BadRequestException } from '../utils/exceptions'
@@ -7,7 +8,6 @@ import { CreateTransactionDto, ListTransactionsDto } from '../dto/transaction'
 import { SupportedCurrency } from '../constants/currencies'
 import { TransactionTypeMap } from '../constants/transactionType'
 import { AwsEventBridgeService } from './awsEventBridgeService'
-import { Events } from '../constants/events'
 
 export class TransactionsService {
   private transactionModel: Model<ITransaction>
@@ -54,13 +54,13 @@ export class TransactionsService {
 
     await account.save()
     await transaction.save()
-
-    this.eventBridgeService.publishEvent(Events.TransactionCreated, {
+    await this.eventBridgeService.publishEvent(Events.TransactionCreated, {
+      id: transaction.id.toString(),
       type: transaction.type,
       amount: transaction.amount,
       currency: transaction.currency,
-      accountId: transaction.accountId,
-      date: transaction.date || new Date()
+      accountId: transaction.accountId.toString(),
+      date: transaction.date || new Date(),
     })
 
     return transaction

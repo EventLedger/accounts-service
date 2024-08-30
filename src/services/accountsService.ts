@@ -25,11 +25,19 @@ export class AccountsService {
     } else {
       this.initializeBalancesObject(createAccountDto)
     }
-    
+
     const newAccount = new this.accountModel(createAccountDto)
     await newAccount.save()
 
-    await this.eventBridgeService.publishEvent(Events.AccountCreated, newAccount)
+    const { id, customerId, currencies, balances } = newAccount
+    await this.eventBridgeService.publishEvent(Events.AccountCreated, {
+      id,
+      customerId,
+      currencies,
+      balances,
+      createdAt: new Date(),
+    })
+
     return newAccount
   }
 
@@ -62,7 +70,16 @@ export class AccountsService {
     Object.assign(account, updateAccountDto)
     const updatedAccount = await account.save()
 
-    this.eventBridgeService.publishEvent(Events.AccountUpdated, updatedAccount)
+    const { id, customerId, currencies, balances } = updatedAccount
+    await this.eventBridgeService.publishEvent(Events.AccountUpdated, {
+      id,
+      customerId,
+      currencies,
+      balances,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+
     return updatedAccount
   }
 

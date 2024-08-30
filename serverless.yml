@@ -40,10 +40,7 @@ functions:
       - http:
           path: accounts/{accountId}
           method: put
-    # environment: 
-    #   SOURCE_NAME: 
-    #   DETAIL_TYPE: TransactionCreated
-
+  
   createTransaction:
     handler: src/handlers/createTransaction.handler
     events:
@@ -61,30 +58,17 @@ functions:
 package:
   individually: true
   exclude:
-    # - node_modules/**
     - coverage/**
     - tests/**
-    # - src/**
     - jest.config.js
     - README.md
-    # - tsconfig.json
-    # - tsconfig.build.json
-    # - .eslintrc.js
     - .prettierrc
     - .gitignore
     - .git/**
     - .github/**
-  # include:
-  #   - dist/**
-  #   - node_modules/**
-
+  
 plugins:
-  # - serverless-esbuild
   - serverless-offline
-
-# package:
-#   # ESBuild will handle bundling, so no need for manual include/exclude
-#   individually: true
 
 build:
   esbuild:
@@ -94,9 +78,7 @@ build:
     target: "node20"
     platform: "node"
     exclude: 
-      - "aws-sdk"
       - "jest"
       - "mongodb-memory-server"
       - "prettier"
-    # ["aws-sdk", "jest", "mongodb-memory-server", "prettier"]
     buildConcurrency: 10
