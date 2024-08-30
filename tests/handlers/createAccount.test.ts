@@ -47,11 +47,26 @@ describe('createAccountHandler', () => {
     expect(account.currencies).toContain('USD')
   })
 
-  it('should return 400 status when validation fails', async () => {
+  it('should throw a BadRequestExcetpion status for missing required params', async () => {
     const event = {
       body: JSON.stringify({
         accountNumber: '1234567890',
         currencies: ['USD'],
+      }),
+    } as any
+
+    const result = await createAccountHandler(event)
+    const body = JSON.parse(result.body)
+
+    expect(result.statusCode).toBe(400)
+    expect(body.message).toBe('Validation Error')
+  })
+
+  it('should throw a BadRequestExcetpion status for unsupported currency', async () => {
+    const event = {
+      body: JSON.stringify({
+        accountNumber: '1234567890',
+        currencies: ['PKR'],
       }),
     } as any
 

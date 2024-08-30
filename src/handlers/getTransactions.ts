@@ -22,7 +22,7 @@ const getTransactionsHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   await connectToDatabase()
   const transactionsService = new TransactionsService()
-  
+
   const queryStringParams = event.queryStringParameters
     ? sanitizeParamsFromQueryString(event.queryStringParameters)
     : {}
@@ -30,7 +30,7 @@ const getTransactionsHandler = async (
     accountId: event.pathParameters?.accountId,
     ...queryStringParams,
   }
-  
+
   await withErrorHandling(() => validateDto(ListTransactionsDto, queryParams))()
   const transactions = await transactionsService.getTransactions(
     queryParams as ListTransactionsDto,

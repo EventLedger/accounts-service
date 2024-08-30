@@ -43,16 +43,15 @@ describe('updateAccountHandler', () => {
       pathParameters: { accountId: account.id },
       body: JSON.stringify({
         currencies: ['USD', 'EUR'],
-        balances: { USD: 200, EUR: 50 },
       }),
     } as any
 
     const result = await updateAccountHandler(event)
     const body = JSON.parse(result.body)
 
-    expect(result.statusCode).toBe(200)
     expect(body.currencies).toContain('EUR')
-    expect(body.balances?.EUR).toBe(50)
+    expect(result.statusCode).toBe(200)
+    expect(body.balances?.EUR).toBe(0)
   })
 
   it('should return 404 when the account to update is not found', async () => {

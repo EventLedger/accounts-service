@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 import { Account } from '../../src/models/account'
 import { connectToDatabase } from '../../src/utils/connectToDB'
+import { TransactionType } from '../../src/constants/transactionType'
 import { handler as createTransactionHandler } from '../../src/handlers/createTransaction'
 
 jest.mock('../../src/utils/connectToDB')
@@ -38,16 +39,15 @@ describe('createTransactionHandler', () => {
       balances: new Map([['USD', 100]]),
     })
     await account.save()
-
+    console.log({ account })
     const event = {
       body: JSON.stringify({
         accountId: account._id.toString(),
-        type: 'INBOUND',
+        type: TransactionType.INBOUND,
         amount: 50,
         currency: 'USD',
       }),
     } as any
-
     const result = await createTransactionHandler(event)
     const body = JSON.parse(result.body)
 
@@ -59,7 +59,7 @@ describe('createTransactionHandler', () => {
   it('should return 400 status for validation errors', async () => {
     const event = {
       body: JSON.stringify({
-        type: 'INBOUND',
+        type: TransactionType.INBOUND,
         amount: -50,
         currency: 'USD',
       }),
@@ -78,7 +78,7 @@ describe('createTransactionHandler', () => {
     const event = {
       body: JSON.stringify({
         accountId: nonExistentId.toString(),
-        type: 'INBOUND',
+        type: TransactionType.INBOUND,
         amount: 50,
         currency: 'USD',
       }),

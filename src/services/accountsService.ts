@@ -3,7 +3,7 @@ import { Model } from 'mongoose'
 import { Events } from '../constants/events'
 import { Account, IAccount } from '../models/account'
 import { CreateAccountDto, UpdateAccountDto } from '../dto/account'
-import { BadRequestException, NotFoundException } from '../utils/exceptions'
+import { NotFoundException } from '../utils/exceptions'
 import { SupportedCurrency } from '../constants/currencies'
 import { AwsEventBridgeService } from './awsEventBridgeService'
 
@@ -17,14 +17,7 @@ export class AccountsService {
   }
 
   async createAccount(createAccountDto: CreateAccountDto): Promise<IAccount> {
-    if (createAccountDto.balances) {
-      this.validateCurrenciesInBalance(
-        createAccountDto.balances,
-        createAccountDto.currencies,
-      )
-    } else {
-      this.initializeBalancesObject(createAccountDto)
-    }
+    this.initializeBalancesObject(createAccountDto)
 
     const newAccount = new this.accountModel(createAccountDto)
     await newAccount.save()
@@ -60,13 +53,6 @@ export class AccountsService {
       this.updateBalancesForNewCurrencies(account, updateAccountDto.currencies)
     }
 
-    if (updateAccountDto.balances) {
-      this.validateCurrenciesInBalance(
-        updateAccountDto.balances,
-        updateAccountDto.currencies || account.currencies,
-      )
-    }
-
     Object.assign(account, updateAccountDto)
     const updatedAccount = await account.save()
 
@@ -82,35 +68,9 @@ export class AccountsService {
     return updatedAccount
   }
 
-  private validateCurrenciesInBalance(
-    balances: CreateAccountDto['balances'] = {},
-    supportedCurrencies: SupportedCurrency[],
-  ) {
-    for (const currency in balances) {
-      if (!supportedCurrencies.includes(currency as SupportedCurrency)) {
-        throw new BadRequestException(
-          `Unsupported currency in balances: ${currency}`,
-        )
-      }
-
-      const amount = balances[currency]
-      if (amount <= 0) {
-        throw new BadRequestException(
-          `Invalid amount for currency ${currency}: ${amount}. Amount must be a positive number.`,
-        )
-      }
-    }
-
-    supportedCurrencies.forEach(
-      (currency) => !(currency in balances) && (balances[currency] = 0),
-    )
-  }
-
   private initializeBalancesObject(createAccountDto: CreateAccountDto) {
-    createAccountDto.balances = {}
-    createAccountDto.currencies.forEach(
-      (currency) => (createAccountDto.balances![currency] = 0),
-    )
+    const balances: IAccount['balances'] = new Map()
+    createAccountDto.currencies.forEach((currency) => (balances[currency] = 0))
   }
 
   private updateBalancesForNewCurrencies(

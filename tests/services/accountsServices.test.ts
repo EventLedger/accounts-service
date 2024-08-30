@@ -3,10 +3,7 @@ import mongoose from 'mongoose'
 import { Account } from '../../src/models/account'
 import { AccountsService } from '../../src/services/accountsService'
 import { CreateAccountDto, UpdateAccountDto } from '../../src/dto/account'
-import {
-  BadRequestException,
-  NotFoundException,
-} from '../../src/utils/exceptions'
+import { NotFoundException } from '../../src/utils/exceptions'
 
 jest.mock('aws-sdk', () => {
   const EventBridge = {
@@ -29,7 +26,6 @@ describe('AccountsService', () => {
         customerId: 'customerId123',
         accountNumber: '1234567890',
         currencies: ['USD'],
-        balances: { USD: 100 },
       }
 
       const result = await accountsService.createAccount(createAccountDto)
@@ -39,33 +35,6 @@ describe('AccountsService', () => {
       expect(result.customerId).toEqual(createAccountDto.customerId)
       expect(result.accountNumber).toEqual(createAccountDto.accountNumber)
       expect(result.currencies).toEqual(createAccountDto.currencies)
-      expect(result.balances.get('USD')).toEqual(createAccountDto.balances?.USD)
-    })
-
-    it('should throw a BadRequestException for unsupported currency in balances', async () => {
-      const createAccountDto: CreateAccountDto = {
-        customerId: 'customerId123',
-        accountNumber: '1234567890',
-        currencies: ['USD'],
-        balances: { ABC: 123 },
-      }
-
-      await expect(
-        accountsService.createAccount(createAccountDto),
-      ).rejects.toThrow(BadRequestException)
-    })
-
-    it('should throw a BadRequestException for invalid balances', async () => {
-      const createAccountDto: CreateAccountDto = {
-        customerId: 'customerId123',
-        accountNumber: '1234567890',
-        currencies: ['USD'],
-        balances: { USD: -123 },
-      }
-
-      await expect(
-        accountsService.createAccount(createAccountDto),
-      ).rejects.toThrow(BadRequestException)
     })
   })
 
@@ -106,7 +75,6 @@ describe('AccountsService', () => {
 
       const updateAccountDto: UpdateAccountDto = {
         currencies: ['USD', 'EUR'],
-        balances: { USD: 200, EUR: 50 },
       }
 
       const updatedAccount = await accountsService.updateAccount(
@@ -115,28 +83,14 @@ describe('AccountsService', () => {
       )
 
       expect(updatedAccount.currencies).toContain('EUR')
-      expect(updatedAccount.balances.get('EUR')).toEqual(50)
-      expect(updatedAccount.balances.get('USD')).toEqual(200)
+      expect(updatedAccount.balances.get('EUR')).toEqual(0)
+      expect(updatedAccount.balances.get('USD')).toEqual(100)
     })
 
     it('should throw a NotFoundException if the account to update is not found', async () => {
       const nonExistentId = new mongoose.Types.ObjectId()
       const updateAccountDto: UpdateAccountDto = {
         currencies: ['USD', 'EUR'],
-      }
-
-      await expect(
-        accountsService.updateAccount(
-          nonExistentId.toHexString(),
-          updateAccountDto,
-        ),
-      ).rejects.toThrow(NotFoundException)
-    })
-
-    it('should throw a BadRequestException for invalid currency in balances', async () => {
-      const nonExistentId = new mongoose.Types.ObjectId()
-      const updateAccountDto: UpdateAccountDto = {
-        balances: { CNY: 124 },
       }
 
       await expect(

@@ -19,6 +19,8 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
     return cachedDbConnection
   } catch (error: any) {
     cachedDbConnection = null
-    throw new InternalServerError(`Failed to connect to MongoDB: ${error.message}`)
+    throw new InternalServerError(
+      `Failed to connect to MongoDB: ${error.message}`,
+    )
   }
 }

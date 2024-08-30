@@ -4,7 +4,6 @@ import {
   IsArray,
   IsOptional,
   IsIn,
-  IsObject,
 } from 'class-validator'
 
 import {
@@ -28,11 +27,6 @@ export class CreateAccountDto {
     message: 'Unsupported currency detected',
   })
   currencies: SupportedCurrency[]
-
-  // Making it optional, as balances might not be set on creation
-  @IsOptional()
-  @IsObject({ message: 'balances must be an object' })
-  balances?: { [key: string]: number }
 }
 
 export class UpdateAccountDto {
@@ -51,8 +45,4 @@ export class UpdateAccountDto {
   })
   @IsOptional()
   currencies?: SupportedCurrency[]
-
-  @IsOptional()
-  @IsObject({ message: 'balances must be an object' })
-  balances?: Record<string, number>
 }
