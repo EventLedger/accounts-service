@@ -7,11 +7,10 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1
   environment:
-    MONGODB_URI: ${param:MONGODB_URI}
-    EVENT_BUS_NAME: ${param:EVENT_BUS_NAME}
-    EVENT_SOURCE: ${param:EVENT_SOURCE}
-    AWS_ACCOUNT_ID: ${param:AWS_ACCOUNT_ID}
-    AWS_REGION: ${param:AWS_REGION}
+    MONGODB_URI: ${env:MONGODB_URI}
+    EVENT_BUS_NAME: ${env:EVENT_BUS_NAME}
+    EVENT_SOURCE: ${env:EVENT_SOURCE}
+    AWS_ACCOUNT_REGION: ${env:AWS_ACCOUNT_REGION}
   
   iam:
     role:
@@ -20,7 +19,7 @@ provider:
           Action:
             - events:PutEvents
           Resource:
-            - arn:aws:events:${param:AWS_REGION}:${param:AWS_ACCOUNT_ID}:event-bus/${param:EVENT_BUS_NAME}
+            - arn:aws:events:${env:AWS_ACCOUNT_REGION}:${env:AWS_ACCOUNT_ID}:event-bus/${env:EVENT_BUS_NAME}
 
 functions:
   createAccount:

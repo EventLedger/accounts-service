@@ -8,7 +8,7 @@ export class AwsEventBridgeService {
 
   constructor() {
     this.eventBridge = new EventBridge({
-      region: process.env.AWS_REGION,
+      region: process.env.AWS_ACCOUNT_REGION,
     })
   }
 
