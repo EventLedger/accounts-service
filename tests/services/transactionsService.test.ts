@@ -25,7 +25,7 @@ describe('TransactionsService', () => {
 
   beforeAll(async () => {
     accountsService = new AccountsService()
-    transactionsService = new TransactionsService(accountsService)
+    transactionsService = new TransactionsService()
   })
 
   afterAll(async () => {

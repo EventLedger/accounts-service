@@ -3,7 +3,6 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { validateDto } from '../utils/validateDto'
 import { ListTransactionsDto } from '../dto/transaction'
 import { connectToDatabase } from '../utils/connectToDB'
-import { AccountsService } from '../services/accountsService'
 import { TransactionsService } from '../services/transactionsService'
 import { withErrorHandling } from '../utils/withErrorHandling'
 
@@ -22,16 +21,17 @@ const getTransactionsHandler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
   await connectToDatabase()
-  const accountsService = new AccountsService()
-  const transactionsService = new TransactionsService(accountsService)
-
+  const transactionsService = new TransactionsService()
+  
+  const queryStringParams = event.queryStringParameters
+    ? sanitizeParamsFromQueryString(event.queryStringParameters)
+    : {}
   const queryParams = {
     accountId: event.pathParameters?.accountId,
-    ...sanitizeParamsFromQueryString(event.queryStringParameters),
+    ...queryStringParams,
   }
-
-  await withErrorHandling(() => validateDto(ListTransactionsDto, queryParams))
-
+  
+  await withErrorHandling(() => validateDto(ListTransactionsDto, queryParams))()
   const transactions = await transactionsService.getTransactions(
     queryParams as ListTransactionsDto,
   )

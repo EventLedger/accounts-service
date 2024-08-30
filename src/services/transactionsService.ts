@@ -14,9 +14,9 @@ export class TransactionsService {
   private accountsService: AccountsService
   private eventBridgeService: AwsEventBridgeService
 
-  constructor(accountsService: AccountsService) {
+  constructor() {
     this.transactionModel = Transaction
-    this.accountsService = accountsService
+    this.accountsService = new AccountsService()
     this.eventBridgeService = new AwsEventBridgeService()
   }
 

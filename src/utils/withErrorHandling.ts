@@ -58,7 +58,7 @@ function handleError(error: unknown): APIGatewayProxyResult {
       body: JSON.stringify({ message: error.message }),
     }
   }
-
+  
   return {
     statusCode: 500,
     body: JSON.stringify({
