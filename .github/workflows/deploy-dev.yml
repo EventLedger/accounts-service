@@ -53,4 +53,10 @@ jobs:
 
       - name: Deploy
         run: npm run deploy
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI_DEV }}
+          EVENT_BUS_NAME: ${{ secrets.EVENT_BUS_NAME_DEV }}
+          EVENT_SOURCE: ${{ secrets.EVENT_SOURCE }}
+          AWS_ACCOUNT_REGION: ${{ secrets.AWS_ACCOUNT_REGION }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
       
