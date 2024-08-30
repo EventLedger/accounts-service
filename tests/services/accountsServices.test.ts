@@ -8,6 +8,14 @@ import {
   NotFoundException,
 } from '../../src/utils/exceptions'
 
+jest.mock('aws-sdk', () => {
+  const EventBridge = {
+    putEvents: jest.fn().mockReturnThis(),
+    promise: jest.fn().mockResolvedValue({}),
+  }
+  return { EventBridge: jest.fn(() => EventBridge) }
+})
+
 describe('AccountsService', () => {
   let accountsService: AccountsService
 

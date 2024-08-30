@@ -4,6 +4,13 @@ import { connectToDatabase } from '../../src/utils/connectToDB'
 import { handler as createAccountHandler } from '../../src/handlers/createAccount'
 
 jest.mock('../../src/utils/connectToDB')
+jest.mock('aws-sdk', () => {
+  const EventBridge = {
+    putEvents: jest.fn().mockReturnThis(),
+    promise: jest.fn().mockResolvedValue({}),
+  }
+  return { EventBridge: jest.fn(() => EventBridge) }
+})
 
 describe('createAccountHandler', () => {
   beforeAll(async () => {

@@ -35,8 +35,8 @@
     "offline": "npm run build && serverless offline",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
+    "format": "prettier --write .",
     "format:check": "prettier --check  .",
-    "test": "jest"
+    "test": "jest ."
   }
 }
