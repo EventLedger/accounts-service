@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+import { InternalServerError } from './exceptions'
+
 let cachedDbConnection: typeof mongoose | null = null
 
 export async function connectToDatabase(): Promise<typeof mongoose> {
@@ -17,6 +19,6 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
     return cachedDbConnection
   } catch (error: any) {
     cachedDbConnection = null
-    throw new Error(`Failed to connect to MongoDB: ${error.message}`)
+    throw new InternalServerError(`Failed to connect to MongoDB: ${error.message}`)
   }
 }
