@@ -39,7 +39,7 @@ describe('createTransactionHandler', () => {
       balances: new Map([['USD', 100]]),
     })
     await account.save()
-    console.log({ account })
+
     const event = {
       body: JSON.stringify({
         accountId: account._id.toString(),

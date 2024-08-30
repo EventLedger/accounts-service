@@ -34,7 +34,6 @@ export class TransactionsService {
     )
 
     if (createTransactionDto.type === TransactionType.INBOUND) {
-      console.log('running inbound')
       account.balances.set(
         createTransactionDto.currency,
         (account.balances.get(createTransactionDto.currency) || 0) +

@@ -6,6 +6,7 @@ import { CreateAccountDto, UpdateAccountDto } from '../dto/account'
 import { NotFoundException } from '../utils/exceptions'
 import { SupportedCurrency } from '../constants/currencies'
 import { AwsEventBridgeService } from './awsEventBridgeService'
+import { filterUndefined } from 'src/utils/filterUndefined'
 
 export class AccountsService {
   private accountModel: Model<IAccount>
@@ -57,6 +58,8 @@ export class AccountsService {
     if (updateAccountDto.currencies) {
       this.updateBalancesForNewCurrencies(account, updateAccountDto.currencies)
     }
+
+    Object.assign(account, filterUndefined(updateAccountDto))
     const updatedAccount = await account.save()
 
     const { id, customerId, currencies, balances } = updatedAccount
