@@ -15,27 +15,44 @@ function isErrorWithStatusCode(error: unknown): error is {
   )
 }
 
+function isMongooseError(error: unknown): error is {
+  code: number
+  statusCode: number
+  message: string
+  name: string
+  keyValue: string
+} {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    error['name'] === 'MongoServerError' &&
+    'code' in error &&
+    'keyValue' in error
+  )
+}
+
 function handleError(error: unknown): APIGatewayProxyResult {
-  if (isErrorWithStatusCode(error)) {
-    if (error.name === 'MongoServerError') {
-      if (error.code === 11000) {
-        return {
-          statusCode: 409,
-          body: JSON.stringify({
-            message: 'Duplicate key error',
-            errors: [error.keyValue],
-          }),
-        }
-      } else {
-        return {
-          statusCode: 500,
-          body: JSON.stringify({
-            message: 'Unhandled mongoose error',
-            errors: [error.keyValue],
-          }),
-        }
+  if (isMongooseError(error)) {
+    if (error.code === 11000) {
+      return {
+        statusCode: 409,
+        body: JSON.stringify({
+          message: 'Duplicate key error',
+          errors: [error.keyValue],
+        }),
+      }
+    } else {
+      return {
+        statusCode: error.code,
+        body: JSON.stringify({
+          message: 'Unhandled mongoose error',
+          errors: [error.keyValue],
+        }),
       }
     }
+  }
+  
+  if (isErrorWithStatusCode(error)) {
     return {
       statusCode: error.statusCode,
       body: JSON.stringify({ message: error.message }),

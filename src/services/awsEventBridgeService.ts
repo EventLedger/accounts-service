@@ -30,8 +30,7 @@ export class AwsEventBridgeService {
 
     try {
       const event = await this.eventBridge.putEvents(params).promise()
-      console.log({ detail: JSON.stringify(eventDetail) })
-      console.log('PUBLISHING EVENT', event)
+      console.info('PUBLISHING EVENT---', event)
     } catch (e) {
       throw new InternalServerError(`Failed with error: ${e}`)
     }
