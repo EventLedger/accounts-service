@@ -62,4 +62,5 @@ jobs:
           EVENT_SOURCE: ${{ secrets.EVENT_SOURCE }}
           AWS_ACCOUNT_REGION: ${{ secrets.AWS_ACCOUNT_REGION }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
       
